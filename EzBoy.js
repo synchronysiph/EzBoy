@@ -36,7 +36,7 @@ popup.style = `
 // Barra superior sempre visível
 const barra = document.createElement('div');
 barra.style = "display:flex;justify-content:space-between;align-items:center;padding:15px 15px 0 15px;";
-barra.innerHTML = `<b>🧠 EzBoy IA</b>`;
+barra.innerHTML = `<b>EzBoy IA</b>`;
 const minimize = document.createElement('button');
 minimize.innerText = '–';
 minimize.style = 'background:#f1c40f;color:#000;border:none;padding:3px 12px;cursor:pointer;border-radius:5px;font-size:18px';
