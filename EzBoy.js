@@ -1,5 +1,38 @@
 javascript:(async()=>{
 
+// 🔑 Solicitar API Key
+const apiKey = prompt("🧠 Insira sua API Key da OpenAI:");
+
+if(!apiKey){
+    alert("❌ API Key não fornecida.");
+    return;
+}
+
+// 🔍 Validar API Key
+try {
+    const test = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey
+        },
+        body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: "Diga OK" }],
+            temperature: 0.1
+        })
+    });
+    const res = await test.json();
+    if(!res.choices){
+        alert("❌ API Key inválida ou erro de conexão.");
+        return;
+    }
+} catch(err){
+    alert("❌ Erro na validação da API Key: "+err.message);
+    return;
+}
+
+// 🔥 Se API válida, abrir popup do sistema
 const popup = document.createElement('div');
 popup.style.position = 'fixed';
 popup.style.top = '10px';
@@ -94,7 +127,7 @@ ${textArea.value}
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
-                'Authorization':'Bearer SUA_API_KEY_AQUI' // 🔥 <<< COLE SUA KEY AQUI 🔥
+                'Authorization':'Bearer ' + apiKey
             },
             body:JSON.stringify({
                 model:"gpt-3.5-turbo",
