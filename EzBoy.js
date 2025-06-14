@@ -27,20 +27,29 @@ try {
 const popup = document.createElement('div');
 popup.style = `
   position:fixed;top:10px;right:10px;z-index:9999;
-  background:#222;color:#fff;padding:15px;border-radius:10px;
+  background:#222;color:#fff;padding:0;border-radius:10px;
   box-shadow:0 0 10px rgba(0,0,0,0.5);
   max-width:400px;width:400px;
   font-family: Arial, sans-serif; transition:all 0.3s; overflow:hidden;
 `;
 
-popup.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;">
-  <b>🧠 EzBoy IA</b>
-  <button id="ezboy-minimize" style="background:#f1c40f;color:#000;border:none;padding:3px 12px;cursor:pointer;border-radius:5px;font-size:18px">–</button>
-</div><br>`;
+// Barra superior sempre visível
+const barra = document.createElement('div');
+barra.style = "display:flex;justify-content:space-between;align-items:center;padding:15px 15px 0 15px;";
+barra.innerHTML = `<b>🧠 EzBoy IA</b>`;
+const minimize = document.createElement('button');
+minimize.innerText = '–';
+minimize.style = 'background:#f1c40f;color:#000;border:none;padding:3px 12px;cursor:pointer;border-radius:5px;font-size:18px';
+barra.appendChild(minimize);
+popup.appendChild(barra);
 
-const text = document.body.innerText;
+// Conteúdo que some/volta ao minimizar/maximizar
+const conteudo = document.createElement('div');
+conteudo.style = "padding:0 15px 15px 15px;";
+popup.appendChild(conteudo);
+
 const textArea = document.createElement('textarea');
-textArea.value = text;
+textArea.value = document.body.innerText;
 textArea.style = `
   width:100%;height:200px;
   background:#111;color:#fff;
@@ -49,12 +58,12 @@ textArea.style = `
   box-sizing:border-box;
   display:block;
 `;
-popup.appendChild(textArea);
+conteudo.appendChild(textArea);
 
 const gerarBtn = document.createElement('button');
 gerarBtn.innerText = '🧠 Gerar Resposta';
 gerarBtn.style = 'margin-top:10px;background:#27ae60;color:#fff;border:none;padding:5px 10px;cursor:pointer;border-radius:5px;display:block;';
-popup.appendChild(gerarBtn);
+conteudo.appendChild(gerarBtn);
 
 const respostaArea = document.createElement('div');
 respostaArea.style = `
@@ -64,42 +73,29 @@ respostaArea.style = `
   font-size:15px;line-height:1.5;
   box-sizing:border-box;
 `;
-popup.appendChild(respostaArea);
+conteudo.appendChild(respostaArea);
 
 document.body.appendChild(popup);
 
 // --- Minimizar/maximizar botão ---
-const minimize = popup.querySelector('#ezboy-minimize');
 let isMinimized = false;
-let isResposta = false; // se está mostrando resposta
+let isResposta = false;
 
 minimize.onclick = ()=>{
-    if (isMinimized) {
-        // Restaurar popup
-        popup.style.maxWidth = "400px";
+    if(isMinimized){
+        conteudo.style.display = '';
         popup.style.width = "400px";
+        popup.style.maxWidth = "400px";
         popup.style.height = "";
         popup.style.borderRadius = "10px";
-        if(isResposta){
-            respostaArea.style.display = '';
-            textArea.style.display = 'none';
-            gerarBtn.style.display = 'none';
-        } else {
-            textArea.style.display = '';
-            gerarBtn.style.display = '';
-            respostaArea.style.display = respostaArea.innerHTML.trim() ? '' : 'none';
-        }
         minimize.innerText = '–';
         isMinimized = false;
     } else {
-        // Minimizar popup
-        popup.style.maxWidth = "60px";
+        conteudo.style.display = 'none';
         popup.style.width = "60px";
+        popup.style.maxWidth = "60px";
         popup.style.height = "36px";
         popup.style.borderRadius = "10px";
-        textArea.style.display = 'none';
-        gerarBtn.style.display = 'none';
-        respostaArea.style.display = 'none';
         minimize.innerText = '+';
         isMinimized = true;
     }
@@ -112,7 +108,7 @@ gerarBtn.onclick = async()=>{
   gerarBtn.style.display = 'none';
   isResposta = true;
 
-  // Não expandir popup, só deixa a área da resposta com scroll, popup fica sempre compacto
+  // Mantém popup compacto, só resposta tem scroll
   popup.style.maxWidth = "400px";
   popup.style.width = "400px";
   popup.style.height = "";
@@ -149,5 +145,4 @@ ${textArea.value}
     respostaArea.innerHTML = '❌ Erro: '+err.message;
   }
 };
-
 })();
