@@ -24,21 +24,28 @@ try {
 }
 
 // --- Popup principal ---
-const popup = document.createElement('divz-index:9999;
+const popup = document.createElement('div');
+popup.style = `
+  position:fixed;top:10px;right:10px;z-index:9999;
   background:#222;color:#fff;padding:0;border-radius:10px;
   box-shadow:0 0 10px rgba(0,0,0,0.5);
   max-width:400px;width:400px;
   font-family: Arial, sans-serif; transition:all 0.3s; overflow:hidden;
 `;
 
-// Barra superior sempre visível
+// Barra superior sempre visível, botão à esquerda do título
 const barra = document.createElement('div');
-barra.style = "display:flex;justify-content:space-between;align-items:center;padding:15px 15px 0 15px;";
-barra.innerHTML = `<b>EzBoy IA</b>`;
+barra.style = "display:flex;align-items:center;padding:15px 15px 0 15px;gap:10px;";
+// Botão minimizar
 const minimize = document.createElement('button');
 minimize.innerText = '–';
-minimize.style = 'background:#f1c40f;color:#000;border:none;padding:3px 12px;cursor:pointer;border-radius:5px;font-size:18px';
+minimize.style = 'background:#f1c40f;color:#000;border:none;padding:3px 12px;cursor:pointer;border-radius:5px;font-size:18px;margin-right:10px';
+// Título
+const titulo = document.createElement('b');
+titulo.innerText = 'EzBoy IA';
+// Monta barra: botão, título
 barra.appendChild(minimize);
+barra.appendChild(titulo);
 popup.appendChild(barra);
 
 // Conteúdo que some/volta ao minimizar/maximizar
@@ -59,7 +66,8 @@ textArea.style = `
 conteudo.appendChild(textArea);
 
 const gerarBtn = document.createElement('button');
-gerarBtn.innerText = '🧠 Gerar.style = 'margin-top:10px;background:#27ae60;color:#fff;border:none;padding:5px 10px;cursor:pointer;border-radius:5px;display:block;';
+gerarBtn.innerText = '🧠 Gerar Resposta';
+gerarBtn.style = 'margin-top:10px;background:#27ae60;color:#fff;border:none;padding:5px 10px;cursor:pointer;border-radius:5px;display:block;';
 conteudo.appendChild(gerarBtn);
 
 const respostaArea = document.createElement('div');
