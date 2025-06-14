@@ -23,12 +23,13 @@ try {
   return;
 }
 
-// Popup principal
+// --- Popup principal ---
 const popup = document.createElement('div');
 popup.style = `
   position:fixed;top:10px;right:10px;z-index:9999;
   background:#222;color:#fff;padding:15px;border-radius:10px;
-  box-shadow:0 0 10px rgba(0,0,0,0.5);max-width:400px;
+  box-shadow:0 0 10px rgba(0,0,0,0.5);
+  max-width:400px;width:400px;
   font-family: Arial, sans-serif; transition:all 0.3s; overflow:hidden;
 `;
 
@@ -45,36 +46,57 @@ textArea.style = `
   background:#111;color:#fff;
   border:1px solid #555;border-radius:5px;padding:5px;
   resize:vertical;
+  box-sizing:border-box;
+  display:block;
 `;
 popup.appendChild(textArea);
 
 const gerarBtn = document.createElement('button');
 gerarBtn.innerText = '🧠 Gerar Resposta';
-gerarBtn.style = 'margin-top:10px;background:#27ae60;color:#fff;border:none;padding:5px 10px;cursor:pointer;border-radius:5px;';
+gerarBtn.style = 'margin-top:10px;background:#27ae60;color:#fff;border:none;padding:5px 10px;cursor:pointer;border-radius:5px;display:block;';
 popup.appendChild(gerarBtn);
 
 const respostaArea = document.createElement('div');
-respostaArea.style = 'margin-top:10px;background:#333;padding:10px;border-radius:5px;max-height:60vh;overflow-y:auto;display:none;';
+respostaArea.style = `
+  margin-top:10px;background:#333;padding:10px;border-radius:5px;
+  max-height:250px;overflow-y:auto;
+  display:none;
+  font-size:15px;line-height:1.5;
+  box-sizing:border-box;
+`;
 popup.appendChild(respostaArea);
 
 document.body.appendChild(popup);
 
-// Minimizar/maximizar botão
+// --- Minimizar/maximizar botão ---
 const minimize = popup.querySelector('#ezboy-minimize');
 let isMinimized = false;
+let isResposta = false; // se está mostrando resposta
+
 minimize.onclick = ()=>{
     if (isMinimized) {
-        popup.style.maxWidth = '98vw';
-        popup.style.width = popup.dataset.expanded === '1' ? '98vw' : '400px';
-        popup.style.height = popup.dataset.expanded === '1' ? '96vh' : '';
-        textArea.style.display = popup.dataset.expanded === '1' ? 'none' : '';
-        gerarBtn.style.display = popup.dataset.expanded === '1' ? 'none' : '';
-        respostaArea.style.display = '';
+        // Restaurar popup
+        popup.style.maxWidth = "400px";
+        popup.style.width = "400px";
+        popup.style.height = "";
+        popup.style.borderRadius = "10px";
+        if(isResposta){
+            respostaArea.style.display = '';
+            textArea.style.display = 'none';
+            gerarBtn.style.display = 'none';
+        } else {
+            textArea.style.display = '';
+            gerarBtn.style.display = '';
+            respostaArea.style.display = respostaArea.innerHTML.trim() ? '' : 'none';
+        }
         minimize.innerText = '–';
         isMinimized = false;
     } else {
-        popup.style.width = '60px';
-        popup.style.height = '40px';
+        // Minimizar popup
+        popup.style.maxWidth = "60px";
+        popup.style.width = "60px";
+        popup.style.height = "36px";
+        popup.style.borderRadius = "10px";
         textArea.style.display = 'none';
         gerarBtn.style.display = 'none';
         respostaArea.style.display = 'none';
@@ -88,14 +110,13 @@ gerarBtn.onclick = async()=>{
   respostaArea.style.display = '';
   textArea.style.display = 'none';
   gerarBtn.style.display = 'none';
+  isResposta = true;
 
-  // Popup tela cheia (limitado)
-  popup.style.width = '98vw';
-  popup.style.maxWidth = '98vw';
-  popup.style.height = '96vh';
-  popup.style.maxHeight = '96vh';
-  popup.style.borderRadius = '0';
-  popup.dataset.expanded = '1';
+  // Não expandir popup, só deixa a área da resposta com scroll, popup fica sempre compacto
+  popup.style.maxWidth = "400px";
+  popup.style.width = "400px";
+  popup.style.height = "";
+  popup.style.borderRadius = "10px";
 
   const promptText = `
 Ignore tudo irrelevante como design, menus, anúncios...
@@ -123,9 +144,10 @@ ${textArea.value}
     });
     const json = await res.json();
     const reply = json.choices?.[0]?.message?.content.trim() || '❌ Sem resposta';
-    respostaArea.innerHTML = `<pre style="white-space:pre-wrap">${reply}</pre>`;
+    respostaArea.innerHTML = `<pre style="white-space:pre-wrap;margin:0;font-size:15px;">${reply}</pre>`;
   } catch(err){
     respostaArea.innerHTML = '❌ Erro: '+err.message;
   }
 };
+
 })();
