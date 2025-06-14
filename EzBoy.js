@@ -1,28 +1,36 @@
-(() => {
+(async () => {
   const popup = document.createElement('div');
-  popup.style.position = 'fixed';
-  popup.style.top = '10px';
-  popup.style.right = '10px';
-  popup.style.zIndex = '9999';
-  popup.style.background = '#222';
-  popup.style.color = '#fff';
-  popup.style.padding = '15px';
-  popup.style.borderRadius = '10px';
-  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
-  popup.innerHTML = '✅ <b>Funcionando!</b> <br>EzBoy carregado.';
-  
-  const closeBtn = document.createElement('button');
-  closeBtn.innerText = 'Fechar';
-  closeBtn.style.marginTop = '10px';
-  closeBtn.style.padding = '5px 10px';
-  closeBtn.style.border = 'none';
-  closeBtn.style.borderRadius = '5px';
-  closeBtn.style.background = '#e74c3c';
-  closeBtn.style.color = '#fff';
-  closeBtn.style.cursor = 'pointer';
-
-  closeBtn.onclick = () => popup.remove();
-  popup.appendChild(closeBtn);
-
+  popup.style = `
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #222;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    font-family: Arial;
+  `;
+  popup.innerHTML = `
+    <div style="margin-bottom: 8px;">EzBoy 🤖</div>
+    <input id="ezInput" placeholder="Digite a pergunta..." style="width: 180px; padding: 5px; margin-bottom: 5px; border-radius: 5px; border: none;">
+    <br>
+    <button id="ezBtn" style="padding: 5px 10px; background:#0f0;border:none;border-radius:5px;color:#000;">Enviar</button>
+    <button id="ezClose" style="padding:5px 10px;background:#f00;border:none;border-radius:5px;color:#fff;margin-left:5px;">X</button>
+    <div id="ezResult" style="margin-top:8px;font-size:14px;"></div>
+  `;
   document.body.appendChild(popup);
+
+  document.getElementById('ezBtn').onclick = async () => {
+    const query = document.getElementById('ezInput').value;
+    document.getElementById('ezResult').innerText = '⏳ Processando...';
+
+    // Aqui futuramente vai a conexão com a IA
+    setTimeout(() => {
+      document.getElementById('ezResult').innerText = '🟢 Resposta simulada: ' + query;
+    }, 1500);
+  };
+
+  document.getElementById('ezClose').onclick = () => popup.remove();
 })();
