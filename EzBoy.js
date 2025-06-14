@@ -1,5 +1,5 @@
 javascript:(async()=>{
-const apiKey = prompt("Insira sua API Key do OpenRouter:");
+const apiKey = prompt("Ppp  Insira sua API Key do OpenRouter:");
 if(!apiKey){ alert("🔒 API Key não fornecida."); return; }
 
 // Teste da chave
