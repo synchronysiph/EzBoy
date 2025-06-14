@@ -24,9 +24,7 @@ try {
 }
 
 // --- Popup principal ---
-const popup = document.createElement('div');
-popup.style = `
-  position:fixed;top:10px;right:10px;z-index:9999;
+const popup = document.createElement('divz-index:9999;
   background:#222;color:#fff;padding:0;border-radius:10px;
   box-shadow:0 0 10px rgba(0,0,0,0.5);
   max-width:400px;width:400px;
@@ -61,8 +59,7 @@ textArea.style = `
 conteudo.appendChild(textArea);
 
 const gerarBtn = document.createElement('button');
-gerarBtn.innerText = '🧠 Gerar Resposta';
-gerarBtn.style = 'margin-top:10px;background:#27ae60;color:#fff;border:none;padding:5px 10px;cursor:pointer;border-radius:5px;display:block;';
+gerarBtn.innerText = '🧠 Gerar.style = 'margin-top:10px;background:#27ae60;color:#fff;border:none;padding:5px 10px;cursor:pointer;border-radius:5px;display:block;';
 conteudo.appendChild(gerarBtn);
 
 const respostaArea = document.createElement('div');
